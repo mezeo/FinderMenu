@@ -27,7 +27,6 @@ static FinderExt *_instance = nil;
 
 - (id)init
 {
-    NSLog(@"INIT FINDER EXT");
   self = [super init];
   if (self) {
     [self setupLogging];
@@ -50,7 +49,6 @@ static FinderExt *_instance = nil;
 
 - (NSMenuItem *)createMenuItemFolder
 {
-    NSLog(@"BRRAND IS %@", @BRAND);
     // Build extension menu
     NSMenuItem *myMenuItem = [[NSMenuItem alloc] initWithTitle:@BRAND action:nil keyEquivalent:@""];
     NSMenu *mySubmenu = [[NSMenu alloc] initWithTitle:@BRAND];
