@@ -11,6 +11,7 @@
 #import "ILFinderMenu.h"
 #import "ILPathMenuDelegate.h"
 
+
 @implementation FinderExt
 
 static FinderExt *_instance = nil;
@@ -26,12 +27,15 @@ static FinderExt *_instance = nil;
 
 - (id)init
 {
+    NSLog(@"INIT FINDER EXT");
   self = [super init];
   if (self) {
     [self setupLogging];
     
-    NSMenuItem *menuItem = [self createMenuItem];
-    [self injectMenuItem:menuItem];
+    NSMenuItem *menuItemFile = [self createMenuItemFile];
+    NSMenuItem *menuItemFolder = [self createMenuItemFolder];
+
+    [self injectMenuItem:menuItemFile menuItemFolder:menuItemFolder];
   }
   return self;
 }
@@ -44,45 +48,100 @@ static FinderExt *_instance = nil;
   freopen(logFilePath, "a", stderr);
 }
 
-- (NSMenuItem *)createMenuItem
+- (NSMenuItem *)createMenuItemFolder
 {
-  NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle:@"Test menu"
-                                                    action:nil
-                                             keyEquivalent:@""];
-  NSMenu *submenu = [[NSMenu alloc] initWithTitle:@"My menu"];
-  [submenu setAutoenablesItems:NO];
-  [[submenu addItemWithTitle:@"Item 1"
-                       action:@selector(itemClicked:)
-                keyEquivalent:@""]
-   setTarget:self];
-  [[submenu addItemWithTitle:@"Item 2"
-                       action:@selector(itemClicked:)
-                keyEquivalent:@""]
-   setTarget:self];
-  [menuItem setSubmenu:submenu];
-  return menuItem;
+    NSLog(@"BRRAND IS %@", @BRAND);
+    // Build extension menu
+    NSMenuItem *myMenuItem = [[NSMenuItem alloc] initWithTitle:@BRAND action:nil keyEquivalent:@""];
+    NSMenu *mySubmenu = [[NSMenu alloc] initWithTitle:@BRAND];
+    [mySubmenu setAutoenablesItems:NO];
+
+    [[mySubmenu addItemWithTitle:@FINDER_SECURE_SHARE
+                          action:@selector(openSecureShare:)
+                   keyEquivalent:@""]
+     setTarget:self];
+    
+    [mySubmenu addItem:[NSMenuItem separatorItem]];
+    
+    [[mySubmenu addItemWithTitle:@FINDER_VIEW_WEB_HOME
+                          action:@selector(openWebHome:)
+                   keyEquivalent:@""]
+     setTarget:self];
+
+    [myMenuItem setSubmenu:mySubmenu];
+
+    return myMenuItem;
 }
 
-- (void)injectMenuItem:(NSMenuItem *)menuItem
+- (NSMenuItem *)createMenuItemFile
+{
+    // Build extension menu
+    NSMenuItem *myMenuItem = [[NSMenuItem alloc] initWithTitle:@BRAND action:nil keyEquivalent:@""];
+    NSMenu *mySubmenu = [[NSMenu alloc] initWithTitle:@BRAND];
+    [mySubmenu setAutoenablesItems:NO];
+    
+    [[mySubmenu addItemWithTitle:@FINDER_PUBLIC_SHARE
+                          action:@selector(openPublicShare:)
+                   keyEquivalent:@""]
+     setTarget:self];
+    
+    [[mySubmenu addItemWithTitle:@FINDER_SECURE_SHARE
+                          action:@selector(openSecureShare:)
+                   keyEquivalent:@""]
+     setTarget:self];
+    
+    [[mySubmenu addItemWithTitle:@FINDER_COMMENTS
+                          action:@selector(openComments:)
+                   keyEquivalent:@""]
+     setTarget:self];
+    
+    [[mySubmenu addItemWithTitle:@FINDER_FILE_VERSIONS
+                          action:@selector(openVersions:)
+                   keyEquivalent:@""]
+     setTarget:self];
+    
+    [mySubmenu addItem:[NSMenuItem separatorItem]];
+    
+    [[mySubmenu addItemWithTitle:@FINDER_VIEW_FILE_WEB
+                          action:@selector(openFileWeb:)
+                   keyEquivalent:@""]
+     setTarget:self];
+    
+    [[mySubmenu addItemWithTitle:@FINDER_VIEW_WEB_HOME
+                          action:@selector(openWebHome:)
+                   keyEquivalent:@""]
+     setTarget:self];
+
+    [myMenuItem setSubmenu:mySubmenu];
+
+    return myMenuItem;
+}
+
+- (void)injectMenuItem:(NSMenuItem *)menuItemFile menuItemFolder:menuItemFolder
 {
   // Create menu only in User's home directory
   ILSimpleMenuDelegate *simpleDelegate = [[[ILPathMenuDelegate alloc]
                                            initWithPath:NSHomeDirectory()
-                                           menuItem:menuItem
+                                           menuItemFile:menuItemFile
+                                           menuItemFolder:menuItemFolder
                                            index:4]
                                           autorelease];
   [[ILFinderMenu sharedInstance] setDelegate:simpleDelegate];
 }
 
-- (void)itemClicked:(id)sender
-{
-  NSMenuItem *item = (NSMenuItem *)sender;
-  [[NSAlert alertWithMessageText:[NSString stringWithFormat:@"%@ clicked", [item title]]
-                   defaultButton:nil
-                 alternateButton:nil
-                     otherButton:nil
-       informativeTextWithFormat:@"Selected files: %@", [[ILFinderMenu sharedInstance] selectedItems]]
-   runModal];
+- (void)openBrowser:(NSString *)option {
+    NSString *fullpath = [[[ILFinderMenu sharedInstance] selectedItems] objectAtIndex:0];
+    NSString *launchPath = [NSString stringWithFormat: @"/Applications/%@.app/Contents/Resources/MacSyncBrowserControl.app/Contents/MacOS/MacSyncBrowserControl", @BRAND];
+    [NSTask launchedTaskWithLaunchPath:launchPath arguments:[NSArray arrayWithObjects:fullpath, @BRAND, option, nil]];
 }
+
+- (void)openPublicShare:(id)sender { [self openBrowser:@"publicshare"]; }
+- (void)openSecureShare:(id)sender { [self openBrowser:@"secureshare"]; }
+- (void)openVersions:(id)sender { [self openBrowser:@"version"]; }
+- (void)openComments:(id)sender { [self openBrowser:@"comment"]; }
+- (void)openFileWeb:(id)sender { [self openBrowser:@"fileWeb"]; }
+- (void)openWebHome:(id)sender { [self openBrowser:@"webHome"]; }
+
+
 
 @end

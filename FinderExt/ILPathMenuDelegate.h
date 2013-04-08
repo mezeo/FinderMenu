@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <AppKit/AppKit.h>
 
 #import "ILSimpleMenuDelegate.h"
 
@@ -16,7 +17,8 @@
 }
 
 - (id)initWithPath:(NSString *)path
-          menuItem:(NSMenuItem *)menuItem
+          menuItemFile:(NSMenuItem *)menuItemFile
+          menuItemFolder:(NSMenuItem *)menuItemFolder
              index:(NSInteger)index;
 
 @end

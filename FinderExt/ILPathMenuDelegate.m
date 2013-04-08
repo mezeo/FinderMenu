@@ -13,10 +13,11 @@
 @implementation ILPathMenuDelegate
 
 - (id)initWithPath:(NSString *)path
-          menuItem:(NSMenuItem *)menuItem
+          menuItemFile:(NSMenuItem *)menuItemFile
+          menuItemFolder:(NSMenuItem *)menuItemFolder
              index:(NSInteger)index
 {
-  self = [super initWithMenuItem:menuItem atIndex:index];
+    self = [super initWithMenuItem:menuItemFile menuItemFolder:menuItemFolder atIndex:index];
   if (self) {
     _path = [path retain];
   }
@@ -31,12 +32,11 @@
 
 - (void)finderWillShowContextMenu:(NSMenu *)menu
 {
-  NSArray *selectedItems = [[ILFinderMenu sharedInstance] selectedItems];
-  if (selectedItems
-      && ([selectedItems count] > 0)
-      && [[selectedItems objectAtIndex:0] hasPrefix:_path]) {
-    // Show menu only for specified directory
-    [super finderWillShowContextMenu:menu];
+    NSArray *selectedItems = [[ILFinderMenu sharedInstance] selectedItems];
+
+    if (selectedItems && ([selectedItems count] > 0)
+        && [[selectedItems objectAtIndex:0] hasPrefix:_path]) {
+        [super finderWillShowContextMenu:menu];
   }
 }
 

@@ -10,11 +10,12 @@
 
 @implementation ILSimpleMenuDelegate
 
-- (id)initWithMenuItem:(NSMenuItem *)menuItem atIndex:(NSInteger)index
+- (id)initWithMenuItem:(NSMenuItem *)menuItemFile menuItemFolder:(NSMenuItem *)menuItemFolder atIndex:(NSInteger)index
 {
   self = [super init];
   if (self) {
-    _menuItem = [menuItem retain];
+    _menuItemFile = [menuItemFile retain];
+    _menuItemFolder = [menuItemFolder retain];
     _index = index;
   }
   return self;
@@ -22,17 +23,27 @@
 
 - (void)dealloc
 {
-  [_menuItem release];
+  [_menuItemFile release];
+  [_menuItemFolder release];
   [super dealloc];
 }
 
 - (void)finderWillShowContextMenu:(NSMenu *)menu
 {
-  if ([_menuItem menu]) {
-    // Detach from previous menu
-    [[_menuItem menu] removeItem:_menuItem];
-  }
-  [menu insertItem:_menuItem atIndex:_index];
+    if ([_menuItemFile menu]) {
+        // Detach from previous menu
+        [[_menuItemFile menu] removeItem:_menuItemFile];
+    }
+
+    NSString *full_path = [[[ILFinderMenu sharedInstance] selectedItems] objectAtIndex:0];
+    // Show menu only for specified directory
+    BOOL isDir;
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:full_path isDirectory:&isDir] && isDir) {
+        [menu insertItem:_menuItemFolder atIndex:_index];
+    } else {
+        [menu insertItem:_menuItemFile atIndex:_index];
+    }
 }
 
 @end

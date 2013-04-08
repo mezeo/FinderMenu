@@ -7,15 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import <AppKit/AppKit.h>
 #import "ILFinderMenu.h"
 
 @interface ILSimpleMenuDelegate : NSObject <ILFinderMenuDelegate> {
  @private
-  NSMenuItem *_menuItem;
+  NSMenuItem *_menuItemFile;
+  NSMenuItem *_menuItemFolder;
   NSInteger _index;
 }
 
-- (id)initWithMenuItem:(NSMenuItem *)menuItem atIndex:(NSInteger)index;
+- (id)initWithMenuItem:(NSMenuItem *)menuItemFile menuItemFolder:(NSMenuItem *)menuItemFolder atIndex:(NSInteger)index;
 
 @end

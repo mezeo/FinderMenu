@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <AppKit/AppKit.h>
 
 @protocol ILFinderMenuDelegate <NSObject>
 - (void)finderWillShowContextMenu:(NSMenu *)menu;

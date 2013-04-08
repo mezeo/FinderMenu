@@ -7,7 +7,22 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <AppKit/AppKit.h>
 
 @interface FinderExt : NSObject
 + (void)load;
 @end
+
+#define	BRAND	"MezeoFile"
+
+#define	FINDER_SECURE_SHARE	"Secure Share"
+
+#define	FINDER_PUBLIC_SHARE	"Public Share"
+
+#define	FINDER_FILE_VERSIONS	"Previous Versions"
+
+#define	FINDER_COMMENTS	"Comments"
+
+#define	FINDER_VIEW_WEB_HOME	"View Web Home"
+
+#define	FINDER_VIEW_FILE_WEB	"View File on Web"
