@@ -1,0 +1,14 @@
+SYNC_FOLDER_NAME=MezeoFile
+
+FINDER_SECURE_SHARE=Secure Share
+
+FINDER_PUBLIC_SHARE=Public Share
+
+FINDER_FILE_VERSIONS=Previous Versions
+
+FINDER_COMMENTS=Comments
+
+FINDER_VIEW_WEB_HOME=View Web Home
+
+FINDER_VIEW_FILE_WEB=View File on Web
+
