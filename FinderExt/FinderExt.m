@@ -29,7 +29,9 @@ static FinderExt *_instance = nil;
 {
   self = [super init];
   if (self) {
-    [self setupLogging];
+    // Don't set up logging right now since we don't write much to log.
+    // It will go to console log anyway.
+    //[self setupLogging];
     
     NSMenuItem *menuItemFile = [self createMenuItemFile];
     NSMenuItem *menuItemFolder = [self createMenuItemFolder];
@@ -41,8 +43,9 @@ static FinderExt *_instance = nil;
 
 - (void)setupLogging
 {
-  // Write log file to ~/FinderExt.log
-  const char* logFilePath = [[NSHomeDirectory() stringByAppendingPathComponent:@"FinderExt.log"] UTF8String];
+  // Write log file to ~/Library/Application Support/BRAND/FinderExt.log
+  NSString *logPathComponent = [NSString stringWithFormat: @"Library/Application Support/%@/FinderExt.log", @BRAND];
+  const char* logFilePath = [[NSHomeDirectory() stringByAppendingPathComponent:logPathComponent] UTF8String];
   freopen(logFilePath, "a", stdout);
   freopen(logFilePath, "a", stderr);
 }
