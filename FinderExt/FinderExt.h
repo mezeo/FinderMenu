@@ -13,7 +13,7 @@
 + (void)load;
 @end
 
-#define	BRAND	"MezeoFile"
+#define	BRAND	"Zimbra Sync and Share"
 
 #define	FINDER_SECURE_SHARE	"Secure Share"
 

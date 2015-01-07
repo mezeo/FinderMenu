@@ -1,4 +1,4 @@
-SYNC_FOLDER_NAME=MezeoFile
+SYNC_FOLDER_NAME=Zimbra Sync and Share
 
 FINDER_SECURE_SHARE=Secure Share
 
