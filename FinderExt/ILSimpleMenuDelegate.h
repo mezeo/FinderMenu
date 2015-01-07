@@ -14,9 +14,10 @@
  @private
   NSMenuItem *_menuItemFile;
   NSMenuItem *_menuItemFolder;
+  NSMenuItem *_menuItemOther;
   NSInteger _index;
 }
 
-- (id)initWithMenuItem:(NSMenuItem *)menuItemFile menuItemFolder:(NSMenuItem *)menuItemFolder atIndex:(NSInteger)index;
+- (id)initWithMenuItem:(NSMenuItem *)menuItemFile menuItemFolder:(NSMenuItem *)menuItemFolder menuItemOther:(NSMenuItem *)menuItemOther atIndex:(NSInteger)index;
 
 @end

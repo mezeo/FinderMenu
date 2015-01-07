@@ -35,8 +35,9 @@ static FinderExt *_instance = nil;
     
     NSMenuItem *menuItemFile = [self createMenuItemFile];
     NSMenuItem *menuItemFolder = [self createMenuItemFolder];
+    NSMenuItem *menuItemOther = [self createMenuItemOther];
 
-    [self injectMenuItem:menuItemFile menuItemFolder:menuItemFolder];
+    [self injectMenuItem:menuItemFile menuItemFolder:menuItemFolder menuItemOther:menuItemOther];
   }
   return self;
 }
@@ -118,13 +119,31 @@ static FinderExt *_instance = nil;
     return myMenuItem;
 }
 
-- (void)injectMenuItem:(NSMenuItem *)menuItemFile menuItemFolder:menuItemFolder
+- (NSMenuItem *)createMenuItemOther
+{
+    // Build extension menu
+    NSMenuItem *myMenuItem = [[NSMenuItem alloc] initWithTitle:@BRAND action:nil keyEquivalent:@""];
+    NSMenu *mySubmenu = [[NSMenu alloc] initWithTitle:@BRAND];
+    [mySubmenu setAutoenablesItems:NO];
+
+    [[mySubmenu addItemWithTitle:@FINDER_COPY_TO_SYNC_FOLDER
+                          action:@selector(copyToSyncFolder:)
+                   keyEquivalent:@""]
+     setTarget:self];
+
+    [myMenuItem setSubmenu:mySubmenu];
+
+    return myMenuItem;
+}
+
+- (void)injectMenuItem:(NSMenuItem *)menuItemFile menuItemFolder:menuItemFolder menuItemOther:menuItemOther
 {
   // Create menu only in User's home directory
   ILSimpleMenuDelegate *simpleDelegate = [[[ILPathMenuDelegate alloc]
                                            initWithPath:NSHomeDirectory()
                                            menuItemFile:menuItemFile
                                            menuItemFolder:menuItemFolder
+                                           menuItemOther:menuItemOther
                                            index:4]
                                           autorelease];
   [[ILFinderMenu sharedInstance] setDelegate:simpleDelegate];
@@ -142,7 +161,7 @@ static FinderExt *_instance = nil;
 - (void)openComments:(id)sender { [self openBrowser:@"comment"]; }
 - (void)openFileWeb:(id)sender { [self openBrowser:@"fileWeb"]; }
 - (void)openWebHome:(id)sender { [self openBrowser:@"webHome"]; }
-
+- (void)copyToSyncFolder:(id)sender { [self openBrowser:@"copytosyncfolder"]; }
 
 
 @end

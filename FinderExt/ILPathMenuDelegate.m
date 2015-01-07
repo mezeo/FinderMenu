@@ -15,9 +15,10 @@
 - (id)initWithPath:(NSString *)path
           menuItemFile:(NSMenuItem *)menuItemFile
           menuItemFolder:(NSMenuItem *)menuItemFolder
+          menuItemOther:(NSMenuItem *)menuItemOther
              index:(NSInteger)index
 {
-    self = [super initWithMenuItem:menuItemFile menuItemFolder:menuItemFolder atIndex:index];
+    self = [super initWithMenuItem:menuItemFile menuItemFolder:menuItemFolder menuItemOther:menuItemOther atIndex:index];
   if (self) {
     _path = [path retain];
   }

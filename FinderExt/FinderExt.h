@@ -26,3 +26,5 @@
 #define	FINDER_VIEW_WEB_HOME	"View Web Home"
 
 #define	FINDER_VIEW_FILE_WEB	"View File on Web"
+
+#define	FINDER_COPY_TO_SYNC_FOLDER	"Copy to Zimbra Sync and Share"

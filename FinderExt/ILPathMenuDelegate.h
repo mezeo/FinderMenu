@@ -19,6 +19,7 @@
 - (id)initWithPath:(NSString *)path
           menuItemFile:(NSMenuItem *)menuItemFile
           menuItemFolder:(NSMenuItem *)menuItemFolder
+          menuItemOther:(NSMenuItem *)menuItemOther
              index:(NSInteger)index;
 
 @end
