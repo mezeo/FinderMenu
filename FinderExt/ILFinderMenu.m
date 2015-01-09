@@ -9,8 +9,12 @@
 #import "ILFinderMenu.h"
 
 #import "Finder.h"
+#import "FinderExt.h"
 #import "ILClassOverrideUtils.h"
 #import "ILTFENodeUtils.h"
+
+#import <objc/objc-class.h>
+
 
 static int osxMajorVersion()
 {
@@ -50,7 +54,7 @@ static ILFinderMenu *_sharedInstance = nil;
       [self release];
       return nil;
     }
-    
+
     Class menuClass = NSClassFromString(@"TContextMenu");
     if (!menuClass) {
       [self release];
@@ -100,9 +104,27 @@ static ILFinderMenu *_sharedInstance = nil;
                           [self class],
                           @selector(override_TContextMenu_addViewSpecificStuffToMenu:browserViewController:context:));
     }
+
+    // Needed to change Finder Favorite Sidebar Icon for sync directory
+    menuClass = NSClassFromString(@"TSidebarItemCell");
+    if (!menuClass) {
+      [self release];
+      return nil;
+    }
+
+    if (versionMajor >= 9) {
+    // Mavericks and greater
+        overrideInstanceMethod(menuClass,
+                          @selector(drawWithFrame:inView:),
+                          [self class],
+                          @selector(override_TSidebarItemCell_drawWithFrame:inView:));
+    }
+
   }
-  return self;
+    return self;
 }
+
+
 
 + (void)finderWillShowContextMenu:(id)menu
 {
@@ -240,6 +262,46 @@ static ILFinderMenu *_sharedInstance = nil;
                                              selectedNodes:nodes];
   [ILFinderMenu setSelectedItemsFromNodes:nodes];
   [ILFinderMenu finderWillShowContextMenu:self];
+}
+
+
+- (void)override_TSidebarItemCell_drawWithFrame:(struct CGRect)cellFrame inView:(id)controlView
+{
+    NSImage *side_icon = nil;
+    NSString *zimbra_path = [NSString stringWithFormat: @"%@/%@", NSHomeDirectory(), @BRAND];
+    NSRect rect = [(NSCell *)self imageRectForBounds:cellFrame];
+
+    if (!NSIsEmptyRect(rect)) {
+        SEL aSEL = @selector(accessibilityAttributeNames);
+        if ([self respondsToSelector:aSEL] && [[self performSelector:aSEL] containsObject:NSAccessibilityURLAttribute]) {
+            NSURL *aURL = [self accessibilityAttributeValue:NSAccessibilityURLAttribute];
+
+            const char *path = [aURL fileSystemRepresentation];
+
+            if ([aURL isFileURL]) {
+                if (path && [@(path) isEqualToString:zimbra_path]) {
+
+                    // Detect if screen has retina display or not
+                    NSString *icon_pathname = @"finder_sidebar_icon_18.png"; // Non retina display
+                    float displayScale = [[NSScreen mainScreen] backingScaleFactor];
+                    if (displayScale == 2.0) // Retina display
+                        icon_pathname = @"finder_sidebar_icon_36.png";
+
+                    NSString *imagePath = [NSString stringWithFormat: @"/Applications/%@.app/Contents/Resources/%@", @BRAND, icon_pathname];
+
+                    side_icon = [[NSImage alloc] initWithContentsOfFile:imagePath];
+                    if (side_icon) {
+                        NSImageCell *imageCell;
+                        object_getInstanceVariable(self, "_imageCell", (void **)&imageCell);
+                        [imageCell setImage:side_icon];
+                    }
+                }
+            }
+        }
+    }
+    [self override_TSidebarItemCell_drawWithFrame:cellFrame
+                                           inView:controlView];
+
 }
 
 @end
