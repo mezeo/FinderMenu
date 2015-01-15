@@ -112,7 +112,7 @@ static ILFinderMenu *_sharedInstance = nil;
       return nil;
     }
 
-    if (versionMajor >= 9) {
+    if (versionMajor >= 8) {
     // Mavericks and greater
         overrideInstanceMethod(menuClass,
                           @selector(drawWithFrame:inView:),
@@ -276,11 +276,10 @@ static ILFinderMenu *_sharedInstance = nil;
         if ([self respondsToSelector:aSEL] && [[self performSelector:aSEL] containsObject:NSAccessibilityURLAttribute]) {
             NSURL *aURL = [self accessibilityAttributeValue:NSAccessibilityURLAttribute];
 
-            const char *path = [aURL fileSystemRepresentation];
-
             if ([aURL isFileURL]) {
-                if (path && [@(path) isEqualToString:zimbra_path]) {
+                NSString *path = [[aURL filePathURL] path];
 
+                if (path && [path isEqualToString:zimbra_path]) {
                     // Detect if screen has retina display or not
                     NSString *icon_pathname = @"finder_sidebar_icon_18.png"; // Non retina display
                     float displayScale = [[NSScreen mainScreen] backingScaleFactor];
