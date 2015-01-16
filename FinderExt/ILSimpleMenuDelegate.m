@@ -55,6 +55,12 @@
     if ([_menuItemFile menu]) {
         // Detach from previous menu
         [[_menuItemFile menu] removeItem:_menuItemFile];
+    } else if ([_menuItemFolder menu]) {
+        // Detach from previous menu
+        [[_menuItemFolder menu] removeItem:_menuItemFolder];
+    } else if ([_menuItemOther menu]) {
+        // Detach from previous menu
+        [[_menuItemOther menu] removeItem:_menuItemOther];
     }
 
     // Find first separator to insert menu after it
