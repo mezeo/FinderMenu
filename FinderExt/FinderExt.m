@@ -87,21 +87,21 @@ static FinderExt *_instance = nil;
                    keyEquivalent:@""]
      setTarget:self];
     
-//    [[mySubmenu addItemWithTitle:@FINDER_SECURE_SHARE
-//                          action:@selector(openSecureShare:)
-//                   keyEquivalent:@""]
-//     setTarget:self];
-//    
-//    [[mySubmenu addItemWithTitle:@FINDER_COMMENTS
-//                          action:@selector(openComments:)
-//                   keyEquivalent:@""]
-//     setTarget:self];
-//    
-//    [[mySubmenu addItemWithTitle:@FINDER_FILE_VERSIONS
-//                          action:@selector(openVersions:)
-//                   keyEquivalent:@""]
-//     setTarget:self];
+    [[mySubmenu addItemWithTitle:@FINDER_SECURE_SHARE
+                          action:@selector(openSecureShare:)
+                   keyEquivalent:@""]
+     setTarget:self];
+
+    [[mySubmenu addItemWithTitle:@FINDER_COMMENTS
+                          action:@selector(openComments:)
+                   keyEquivalent:@""]
+     setTarget:self];
     
+    [[mySubmenu addItemWithTitle:@FINDER_FILE_VERSIONS
+                          action:@selector(openVersions:)
+                   keyEquivalent:@""]
+     setTarget:self];
+
     [mySubmenu addItem:[NSMenuItem separatorItem]];
     
     [[mySubmenu addItemWithTitle:@FINDER_VIEW_FILE_WEB
